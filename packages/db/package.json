@@ -1,0 +1,21 @@
+{
+  "name": "@dev-darshan/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-kit": "^0.31.11",
+    "drizzle-orm": "^0.45.4",
+    "pg": "^8.23.1"
+  }
+}
