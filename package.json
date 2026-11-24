@@ -14,7 +14,11 @@
     "dev": "turbo run dev",
     "verify": "turbo run lint typecheck test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "infra:up": "docker compose -f docker/compose.yaml up -d --wait",
+    "infra:down": "docker compose -f docker/compose.yaml down",
+    "infra:reset": "docker compose -f docker/compose.yaml down -v",
+    "infra:logs": "docker compose -f docker/compose.yaml logs -f"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

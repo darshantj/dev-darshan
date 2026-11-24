@@ -1,0 +1,23 @@
+name: dev-darshan
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: dev-darshan
+      POSTGRES_PASSWORD: dev-darshan # fine for a local-only database; never in production
+      POSTGRES_DB: dev-darshan-db
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      # Postgres 18 images keep data under /var/lib/postgresql/<version>; mount the parent folder.
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U dev-darshan -d dev-darshan-db']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pgdata:
