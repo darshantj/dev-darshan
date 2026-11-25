@@ -41,6 +41,9 @@ importers:
       '@dev-darshan/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@dev-darshan/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@dev-darshan/platform':
         specifier: workspace:*
         version: link:../../packages/platform
@@ -64,8 +67,12 @@ importers:
         version: 0.31.11
       drizzle-orm:
         specifier: ^0.45.4
-        version: 0.45.4(pg@8.23.1)
+        version: 0.45.4(@types/pg@8.23.1)(pg@8.23.1)
       pg:
+        specifier: ^8.23.1
+        version: 8.23.1
+    devDependencies:
+      '@types/pg':
         specifier: ^8.23.1
         version: 8.23.1
 
@@ -820,6 +827,9 @@ packages:
 
   '@types/node@22.20.5':
     resolution: {integrity: sha512-U2+DNr+wSjpsTS/wZGYHq7GcwfuSmKiKvoPvK22zwTlRhU91yOniN4qRR5KhIjvif7ysw/dz/hKmfDH0Ris4aA==}
+
+  '@types/pg@8.23.1':
+    resolution: {integrity: sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A==}
 
   '@typescript-eslint/eslint-plugin@8.74.0':
     resolution: {integrity: sha512-z3KXk1+Vm+d82ZRplOoC89ho4Rf1da5ju6sx8//92GnN532U62DGPjECXkkVqtYzIv0zoJlpO39SX2Z9tk6LVw==}
@@ -2244,6 +2254,12 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/pg@8.23.1':
+    dependencies:
+      '@types/node': 22.20.5
+      pg-protocol: 1.16.1
+      pg-types: 2.2.0
+
   '@typescript-eslint/eslint-plugin@8.74.0(@typescript-eslint/parser@8.74.0(eslint@10.15.0)(typescript@6.0.3))(eslint@10.15.0)(typescript@6.0.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.3
@@ -2432,8 +2448,9 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.23.15
 
-  drizzle-orm@0.45.4(pg@8.23.1):
+  drizzle-orm@0.45.4(@types/pg@8.23.1)(pg@8.23.1):
     optionalDependencies:
+      '@types/pg': 8.23.1
       pg: 8.23.1
 
   end-of-stream@1.4.5:

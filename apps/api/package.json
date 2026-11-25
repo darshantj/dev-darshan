@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@dev-darshan/contracts": "workspace:*",
+    "@dev-darshan/db": "workspace:*",
     "@dev-darshan/platform": "workspace:*",
     "fastify": "^5.12.8",
     "zod": "^4.6.7"

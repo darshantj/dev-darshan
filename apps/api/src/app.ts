@@ -1,11 +1,12 @@
 import Fastify, { type FastifyBaseLogger, type FastifyInstance } from 'fastify';
 import type { Logger } from '@dev-darshan/platform';
 import { registerErrorHandling } from './http/error-handler';
-import { healthRoutes } from './modules/health/health.routes';
+import { healthRoutes, type ReadinessCheck } from './modules/health/health.routes';
 
 export interface AppDeps {
   logger: Logger;
   genRequestId: () => string;
+  readinessChecks: Record<string, ReadinessCheck>;
 }
 
 export async function buildApp(deps: AppDeps): Promise<FastifyInstance> {
@@ -23,7 +24,7 @@ export async function buildApp(deps: AppDeps): Promise<FastifyInstance> {
   });
 
   registerErrorHandling(app);
-  await app.register(healthRoutes);
+  await app.register(healthRoutes, { checks: deps.readinessChecks });
 
   return app;
 }

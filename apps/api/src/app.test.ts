@@ -2,15 +2,16 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { ErrorBody } from '@dev-darshan/contracts';
 import { NotFoundError, createLogger } from '@dev-darshan/platform';
-import { buildApp } from './app';
+import { type AppDeps, buildApp } from './app';
 
 let app: FastifyInstance;
 
-async function makeApp() {
+async function makeApp(readinessChecks: AppDeps['readinessChecks'] = { postgres: async () => {} }) {
   let n = 0;
   return buildApp({
     logger: createLogger({ service: 'api-test', level: 'silent' }),
-    genRequestId: () => `req-${++n}`, // predictable IDs
+    genRequestId: () => `req-${++n}`,
+    readinessChecks,
   });
 }
 
@@ -24,6 +25,27 @@ describe('GET /health', () => {
     const res = await app.inject({ method: 'GET', url: '/health' });
     expect(res.statusCode).toBe(200);
     expect(res.json()).toEqual({ status: 'ok' });
+  });
+});
+
+describe('GET /ready', () => {
+  it('is 200 when every dependency answers', async () => {
+    app = await makeApp();
+    const res = await app.inject({ method: 'GET', url: '/ready' });
+    expect(res.statusCode).toBe(200);
+    expect(res.json()).toEqual({ status: 'ready', checks: { postgres: 'ok' } });
+  });
+
+  it('is 503 and names the dependency that failed', async () => {
+    app = await makeApp({
+      postgres: async () => {},
+      redis: async () => {
+        throw new Error('connection refused');
+      },
+    });
+    const res = await app.inject({ method: 'GET', url: '/ready' });
+    expect(res.statusCode).toBe(503);
+    expect(res.json()).toEqual({ status: 'not_ready', checks: { postgres: 'ok', redis: 'fail' } });
   });
 });
 
