@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "test:int": "vitest run --passWithNoTests .int.test."
   },
   "dependencies": {
     "drizzle-kit": "^0.31.11",
