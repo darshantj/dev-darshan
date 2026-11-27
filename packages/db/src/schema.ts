@@ -3,7 +3,9 @@ import { pgTable, text, timestamp, uuid, boolean } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   // Postgres 18 has uuidv7() built in: time-ordered IDs, good for indexes.
-  id: uuid('id').primaryKey().default(sql`uuidv7()`),
+  id: uuid('id')
+    .primaryKey()
+    .default(sql`uuidv7()`),
   username: text('username').notNull().unique(),
   displayName: text('display_name'),
   avatarUrl: text('avatar_url'),

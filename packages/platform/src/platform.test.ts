@@ -31,16 +31,15 @@ describe('errors', () => {
 });
 
 describe('logger', () => {
-
-    function captureLogs() {
+  function captureLogs() {
     const lines: Array<Record<string, unknown>> = [];
     const destination = {
-        write(chunk: string) {
+      write(chunk: string) {
         lines.push(JSON.parse(chunk));
-        },
+      },
     };
     return { lines, destination };
-    }
+  }
 
   it('writes one JSON object per call with the service, level, fields and message', () => {
     const { lines, destination } = captureLogs();
@@ -84,7 +83,9 @@ describe('logger', () => {
     const { lines, destination } = captureLogs();
     const log = createLogger({ service: 'api', level: 'info' }, destination);
 
-    log.info({ req: { headers: { authorization: 'Bearer secret', cookie: 'sid=1', accept: '*/*' } } });
+    log.info({
+      req: { headers: { authorization: 'Bearer secret', cookie: 'sid=1', accept: '*/*' } },
+    });
 
     expect(lines[0]).toMatchObject({
       req: { headers: { authorization: '[redacted]', cookie: '[redacted]', accept: '*/*' } },
