@@ -11,6 +11,7 @@ export const users = pgTable('users', {
   avatarUrl: text('avatar_url'),
   isGuest: boolean('is_guest').notNull().default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }),
 });
 
 // Types inferred from the table: what a row looks like, and what you may insert.
