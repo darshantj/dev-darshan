@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push to the same branch cancels the older, still-running build.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: '0' # nobody is there to answer prompts
+
+jobs:
+  verify:
+    name: Format, lint, typecheck, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4 # reads the pnpm version from "packageManager"
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm # reuse downloaded packages between runs
+      - run: pnpm install --frozen-lockfile # fail if package.json and the lockfile disagree
+      - run: pnpm format:check
+      - run: pnpm verify
+
+  integration:
+    name: Integration tests (Postgres 18 via Testcontainers)
+    runs-on: ubuntu-latest
+    needs: verify # don't spend minutes on Docker if the quick checks already failed
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:int # GitHub's Ubuntu runners have Docker, so Testcontainers just works
