@@ -18,7 +18,8 @@
     },
     "test:int": {
       "dependsOn": ["^typecheck"],
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["DATABASE_URL"]
     }
   }
 }
